@@ -1,0 +1,74 @@
+#cloud-config
+# Version 8
+
+disable_root: false
+ssh_pwauth: false
+
+system_info:
+  default_user:
+    name: dwon
+    ssh_authorized_keys: &my_ssh_keys
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH6ANIH/AzLkcmjuDWvPhO/Miu3KzBD2emjybTE0/5uw dwon@syra
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHX/JgM2QixDMlQk+wvT4CopSdkPEMQQK5tq58+eMD00 dlitz-1password
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKjASh+QhUtF9OGhTTO73mI1RF1wLqLpPcQoRXHyNikS <ssh://fluffytrezor|ed25519>
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdyT3ngWv8f/Xrg/3pTZ5n74q15ySwWldkBfFgZBfHprET7oBaBYMbWbUB4rndAWFnSmAhWdZ6jeMeKybroH1nwSnamt4kFnr3Y42ct+bObsiwRMGlXZvWweiFVKwWWewmbq+NF+6NPpSalQZpPPySLEY1+K/BO2Px40jbnD+UW6hX3oVsYkazKbrv6jQ/jN0ctfGjkMs+o6NGR+02E/BC63JdVJIxeRtojWR22qf27yA4cuA5nxGVjn3TMU3z+O7/JLCKriwokTZn/NVMCqoCngFsjDOdm0ZyFpVp1DAy6Zu9IYr7mmcG4k9uRgJAqiwgIjmlK8hXHr73VzaSu3tN dwon-syra-us-west.pem
+    sudo: ["ALL=(ALL) NOPASSWD: ALL"]
+    groups: [sudo, docker]
+    shell: /bin/bash
+
+users:
+  - default
+  - name: build
+    groups: [docker]
+    shell: /bin/bash
+    ssh_authorized_keys: *my_ssh_keys
+
+chpasswd:
+  expire: false
+  users:
+    - name: root
+      password: ""
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release
+  - unattended-upgrades
+  - git
+  - vim
+  - atop
+  - magic-wormhole
+  - rsync
+  - apt-cacher-ng
+  # Install xterm for the terminal "resize" command
+  - xterm
+
+#  - make
+#  - gcc
+#  - gcc-arm-linux-gnueabihf
+#  - libncurses-dev
+#  - build-essential
+#  - ccache
+
+runcmd:
+  - mkdir -p /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  - systemctl enable docker
+  - systemctl start docker
+  #- docker pull ghcr.io/armbian/docker-armbian-build:latest
+  #- sudo -u build mkdir -p /home/build/armbian/build
+  #- sudo -u build git clone -b nanopi-r1s-h3 https://github.com/dlitz/armbian-build /home/build/armbian/build
+  #- sudo -u build bash -c "cd /home/build/armbian/build && ./compile.sh BOARD=nanopim1 BRANCH=edge RELEASE=bookworm BUILD_MINIMAL=yes BUILD_DESKTOP=no KERNEL_CONFIGURE=no"
+
+
+final_message: "The system is finally up, after $UPTIME seconds"
+
+# vim:set ft=yaml:
