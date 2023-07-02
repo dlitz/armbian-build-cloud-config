@@ -45,6 +45,7 @@ packages:
   - magic-wormhole
   - rsync
   - apt-cacher-ng
+  - ncurses-term
   # Install xterm for the terminal "resize" command
   - xterm
 
