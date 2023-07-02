@@ -48,12 +48,29 @@ packages:
   # Install xterm for the terminal "resize" command
   - xterm
 
-#  - make
-#  - gcc
 #  - gcc-arm-linux-gnueabihf
-#  - libncurses-dev
-#  - build-essential
-#  - ccache
+
+  # I think armbian can install these automatically, but I want them for crosstool-ng, etc.
+  - make
+  - gcc
+  - libncurses-dev
+  - build-essential
+  - ccache
+
+  - autoconf
+  - automake
+  - flex
+  - bison
+  - libtool-bin
+  - texinfo
+  - autopoint
+  - gawk
+  - unzip
+  - help2man
+  - zlib1g-dev
+  - libzstd-dev
+  - python3-all
+
 
 runcmd:
   - mkdir -p /etc/apt/keyrings
