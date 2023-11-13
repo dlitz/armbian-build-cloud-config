@@ -1,4 +1,0 @@
-instance-id: armbian-build-test
-local-hostname: armbian-build-test
-
-# vim:set ft=yaml:
