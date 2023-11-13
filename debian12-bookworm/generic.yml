@@ -1,0 +1,64 @@
+#cloud-config
+
+disable_root: false
+ssh_pwauth: false
+
+write_files:
+- path: /etc/apt/sources.list.d/dlitz-aptly.sources
+  content: |
+    Types: deb deb-src
+    URIs: http://dlitz-aptly.s3-website.dualstack.us-west-2.amazonaws.com/
+    Suites: default
+    Components: misc
+    Signed-By:
+     -----BEGIN PGP PUBLIC KEY BLOCK-----
+     .
+     mDMEYanySxYJKwYBBAHaRw8BAQdALlTQWUgYRgAX8FjbgbFwKeW4KznlAyxvDezy
+     DSA9Q3m0NGFwdGx5IHJlcG8gc2lnbmluZyBrZXkgPHJlcG8tc2lnbmVyQGFwdGx5
+     LmRsaXR6Lm5ldD6IlgQTFggAPgIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYh
+     BLK8tvc8CE2Ltu8DYHwqNQFofeaaBQJjjwGBBQkHiKm2AAoJEHwqNQFofeaal1YB
+     AOY3ROGtlcv3VeTJg4IKglXwZNpbOw6DCEoTx/zHlh0fAP93ymDOyMVt0diXYkYC
+     ooClZgv5PIKAl8ptlF3pKX5rAQ==
+     =f4T5
+     -----END PGP PUBLIC KEY BLOCK-----
+
+system_info:
+  default_user:
+    name: dwon
+    ssh_authorized_keys: &my_ssh_keys
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH6ANIH/AzLkcmjuDWvPhO/Miu3KzBD2emjybTE0/5uw dwon@syra
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHX/JgM2QixDMlQk+wvT4CopSdkPEMQQK5tq58+eMD00 dlitz-1password
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKjASh+QhUtF9OGhTTO73mI1RF1wLqLpPcQoRXHyNikS <ssh://fluffytrezor|ed25519>
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdyT3ngWv8f/Xrg/3pTZ5n74q15ySwWldkBfFgZBfHprET7oBaBYMbWbUB4rndAWFnSmAhWdZ6jeMeKybroH1nwSnamt4kFnr3Y42ct+bObsiwRMGlXZvWweiFVKwWWewmbq+NF+6NPpSalQZpPPySLEY1+K/BO2Px40jbnD+UW6hX3oVsYkazKbrv6jQ/jN0ctfGjkMs+o6NGR+02E/BC63JdVJIxeRtojWR22qf27yA4cuA5nxGVjn3TMU3z+O7/JLCKriwokTZn/NVMCqoCngFsjDOdm0ZyFpVp1DAy6Zu9IYr7mmcG4k9uRgJAqiwgIjmlK8hXHr73VzaSu3tN dwon-syra-us-west.pem
+    sudo: ["ALL=(ALL) NOPASSWD: ALL"]
+    groups: [sudo, docker]
+    shell: /bin/bash
+
+users:
+  - default
+  - name: build
+    groups: [docker]
+    shell: /bin/bash
+    ssh_authorized_keys: *my_ssh_keys
+
+chpasswd:
+  expire: false
+  users:
+    - name: root
+      password: ""
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - config-dlitz-apt-aptly
+  - config-dlitz-apt-bookworm-backports
+  - config-dlitz-openssh-server
+  - config-dlitz-authorized-keys
+  - config-dlitz-tasks
+  - task-dlitz-server
+  - task-dlitz-network
+
+final_message: "The system is finally up, after $UPTIME seconds"
+
+# vim:set ft=yaml:
