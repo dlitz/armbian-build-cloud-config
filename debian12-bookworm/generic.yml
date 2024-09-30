@@ -26,9 +26,8 @@ system_info:
   default_user:
     name: dwon
     ssh_authorized_keys: &my_ssh_keys
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH6ANIH/AzLkcmjuDWvPhO/Miu3KzBD2emjybTE0/5uw dwon@syra
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHX/JgM2QixDMlQk+wvT4CopSdkPEMQQK5tq58+eMD00 dlitz-1password
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKjASh+QhUtF9OGhTTO73mI1RF1wLqLpPcQoRXHyNikS <ssh://fluffytrezor|ed25519>
+      - sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJya/4TWG/dfdredxnaIrpFfJUDeBx/4m7Vci3yTWuRvAAAAHXNzaDpkd29uQHN5cmEreXViaWtleTI4Njc3MjI3 dwon@syra+yubikey28677227
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdyT3ngWv8f/Xrg/3pTZ5n74q15ySwWldkBfFgZBfHprET7oBaBYMbWbUB4rndAWFnSmAhWdZ6jeMeKybroH1nwSnamt4kFnr3Y42ct+bObsiwRMGlXZvWweiFVKwWWewmbq+NF+6NPpSalQZpPPySLEY1+K/BO2Px40jbnD+UW6hX3oVsYkazKbrv6jQ/jN0ctfGjkMs+o6NGR+02E/BC63JdVJIxeRtojWR22qf27yA4cuA5nxGVjn3TMU3z+O7/JLCKriwokTZn/NVMCqoCngFsjDOdm0ZyFpVp1DAy6Zu9IYr7mmcG4k9uRgJAqiwgIjmlK8hXHr73VzaSu3tN dwon-syra-us-west.pem
     sudo: ["ALL=(ALL) NOPASSWD: ALL"]
     groups: [sudo, docker]
